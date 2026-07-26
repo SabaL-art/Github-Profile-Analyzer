@@ -1,11 +1,7 @@
 import os
-# from dotenv import load_dotenv
 import requests
 from rich.console import Console
 from rich.table import Table
-
-# load_dotenv()
-# TOKEN = os.getenv("API_TOKEN")
 
 
 class Profile:
@@ -18,29 +14,28 @@ class Profile:
 
         # profile
         try:
-            response = requests.get(url)
+            response1 = requests.get(url)
 
-            if response.status_code == 200:
-                self.user = response.json()
-                self.display()
-            elif response.status_code == 404:
+            if response1.status_code == 200:
+                self.user = response1.json()
+            elif response1.status_code == 404:
                 print("Could not find the user!")
             else:
-                print("ERROR: ", response.status_code)
+                print("ERROR: ", response1.status_code)
         except requests.RequestException:
             print("Couldn't connect to GitHub.")
             return
         # repo
         try:
-            response = requests.get(f"{url}/repos?per_page=100")
+            response2 = requests.get(f"{url}/repos?per_page=100")
 
-            if response.status_code == 200:
-                self.repos = response.json()
+            if response2.status_code == 200:
+                self.repos = response2.json()
                 self.display()
-            elif response.status_code == 404:
+            elif response2.status_code == 404:
                 print("Could not find the user!")
             else:
-                print("ERROR: ", response.status_code)
+                print("ERROR: ", response2.status_code)
         except requests.RequestException:
             print("Couldn't connect to GitHub.")
             return
@@ -53,7 +48,7 @@ class Profile:
         """
         console = Console()
 
-        # profile
+        # =========== profile ===========
         profile = Table(title="🪪 Profile Report", style="cyan")
         profile.add_column("FACTOR", style="magenta")
         profile.add_column("ON PROFILE", style="green1")
@@ -72,7 +67,7 @@ class Profile:
         profile.add_row("Hireable", "Yes" if self.user["hireable"]
                         else "N/A" if self.user["hireable"] == None else "No")
 
-        # stats
+        # =========== stats ===========
         stats = Table(title="📊 Statistics", style="turquoise4")
         stats.add_column("FACTOR", style="magenta")
         stats.add_column("ON PROFILE", style="green1")
@@ -82,20 +77,94 @@ class Profile:
         stats.add_row("Followers", str(self.user["followers"]))
         stats.add_row("Following", str(self.user["following"]))
 
-        # repo stats
-        repo = Table(title="🗃️ Repo Statistics")
+        # =========== repo stats ===========
+        languages = {}
+        forks = 0
+        avg_size = 0
+        most_forked = {
+            "name": "",
+            "total_forks": 0
+        }
+        most_starred = {
+            "name": "",
+            "total_stars": 0
+        }
+
+        repo = Table(title="🗃️ Repo Statistics", style="medium_purple4")
         repo.add_column("FACTOR", style="magenta")
         repo.add_column("ON PROFILE", style="green1")
 
-        for i in range(self.user["repo"]):
-            ...
-        repo.add_row("Total Repos", str(self.user["repo"]))
-        repo.add_row("Forked Repos", str(self.user["repo"]))
-        repo.add_row("Original Repos", str(self.user["repo"]))
+        for i in range(len(self.repos)):
+            current_repo = self.repos[i]
+            # language
+            if current_repo["language"] in languages:
+                languages[current_repo["language"]] += 1
+            elif current_repo["language"] == "":
+                if "N/A" not in languages.keys():
+                    languages["N/A"] = 1
+                else:
+                    languages["N/A"] += 1
+            else:
+                languages[current_repo["language"]] = 1
 
+            # is forked?
+            if current_repo["fork"]:
+                forks += 1
+            # most starred
+            if current_repo["stargazers_count"] > most_starred["total_stars"]:
+                most_starred["name"] = current_repo["name"]
+                most_starred["total_stars"] = current_repo["stargazers_count"]
+            # most forked
+            if current_repo["forks_count"] > most_forked["total_forks"]:
+                most_forked["name"] = current_repo["name"]
+                most_forked["total_forks"] = current_repo["forks_count"]
+            # avg size
+            avg_size += current_repo["size"]/len(self.repos)
+
+        # sorting for most used language
+        languages = dict(
+            sorted(languages.items(), key=lambda item: item[1], reverse=True))
+
+        repo.add_row("Total Repos", str(len(self.repos)))
+        repo.add_row("Forked Repos", str(forks))
+        repo.add_row("Original Repos", str(len(self.repos)-forks))
+        # check most_forked
+        if most_forked["name"] == "":
+            repo.add_row("Most Forked", "N/A")
+        else:
+            repo.add_row(
+                "Most Forked", f"{most_forked['name']} : {most_forked['total_forks']}")
+        # check most_starred
+        if most_starred["name"] == "":
+            repo.add_row("Most Starred", "N/A")
+        else:
+            repo.add_row(
+                "Most Starred", f"{most_starred['name']} : {most_starred['total_stars']}")
+
+        repo.add_row("Most Used Language", str(list(languages.items())[0][0]))
+        repo.add_row("Average Repo Size", f"{avg_size:.2f} KB")
+
+        # =========== languages used ===========
+        lang = Table(title="💻 Languages Used", style="bright_black")
+        lang.add_column("FACTOR", style="magenta")
+        lang.add_column("ON PROFILE", style="green1")
+
+        percentage = []
+        for l in languages:
+            percentage.append(languages[l]*100/(len(self.repos)-forks))
+        i = 0
+        for l in languages:
+            lang.add_row(str(l), f"{'█'*languages[l]} {percentage[i]:.2f}%")
+            i += 1
+
+        # display the tables
         console.print(profile)
         console.print()
         console.print(stats)
+        console.print()
+        console.print(repo)
+        console.print()
+        console.print(lang)
 
 
 def main():
