@@ -41,7 +41,6 @@ class Profile:
             return
 
     # display results
-
     def display(self):
         """
         followers/following count, repo count, contributions count, most used languages
@@ -94,22 +93,18 @@ class Profile:
         repo.add_column("FACTOR", style="magenta")
         repo.add_column("ON PROFILE", style="green1")
 
-        for i in range(len(self.repos)):
-            current_repo = self.repos[i]
-            # language
-            if current_repo["language"] in languages:
-                languages[current_repo["language"]] += 1
-            elif current_repo["language"] == "":
-                if "N/A" not in languages.keys():
-                    languages["N/A"] = 1
-                else:
-                    languages["N/A"] += 1
-            else:
-                languages[current_repo["language"]] = 1
+        for current_repo in self.repos:
 
             # is forked?
             if current_repo["fork"]:
                 forks += 1
+                continue
+            # language
+            language = current_repo["language"] or "N/A"
+            if language in languages:
+                languages[language] += 1
+            else:
+                languages[language] = 1
             # most starred
             if current_repo["stargazers_count"] > most_starred["total_stars"]:
                 most_starred["name"] = current_repo["name"]
@@ -119,8 +114,11 @@ class Profile:
                 most_forked["name"] = current_repo["name"]
                 most_forked["total_forks"] = current_repo["forks_count"]
             # avg size
-            avg_size += current_repo["size"]/len(self.repos)
-
+            avg_size += current_repo["size"]
+        try:
+            avg_size /= len(self.repos)-forks
+        except ZeroDivisionError:
+            avg_size = 0
         # sorting for most used language
         languages = dict(
             sorted(languages.items(), key=lambda item: item[1], reverse=True))
@@ -140,8 +138,12 @@ class Profile:
         else:
             repo.add_row(
                 "Most Starred", f"{most_starred['name']} : {most_starred['total_stars']}")
-
-        repo.add_row("Most Used Language", str(list(languages.items())[0][0]))
+        # check languages
+        if languages:
+            repo.add_row("Most Used Language", str(
+                list(languages.items())[0][0]))
+        else:
+            repo.add_row("Most Used Language", "N/A")
         repo.add_row("Average Repo Size", f"{avg_size:.2f} KB")
 
         # =========== languages used ===========
@@ -150,14 +152,16 @@ class Profile:
         lang.add_column("ON PROFILE", style="green1")
 
         percentage = []
+        total = sum(languages.values())
         for l in languages:
-            percentage.append(languages[l]*100/(len(self.repos)-forks))
+            percentage.append(languages[l]*100/total)
         i = 0
         for l in languages:
-            lang.add_row(str(l), f"{'█'*languages[l]} {percentage[i]:.2f}%")
+            lang.add_row(
+                str(l), f"{'█'*round(percentage[i]/5)} {percentage[i]:.2f}%")
             i += 1
 
-        # display the tables
+        # =========== display the tables ===========
         console.print(profile)
         console.print()
         console.print(stats)
