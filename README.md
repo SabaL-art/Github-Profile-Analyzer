@@ -1,112 +1,121 @@
 # GitHub Profile Analyzer
 
-A terminal-based GitHub Profile Analyzer built in Python.
+A terminal-based Python application that fetches and analyzes a GitHub user's public profile using the GitHub REST API. The program generates a clean, colorful report with profile information, repository statistics, and programming language usage.
 
-Analyze any public GitHub profile using the GitHub REST API and view useful statistics about the user. This project is currently under development and new features will be added over time.
+## Features
 
-> **Status:** 🚧 Work in Progress
+* 📄 Displays profile information
 
-## Current Features
+  * Name
+  * Account type
+  * Account creation date
+  * Last profile update
+  * Email (if public)
+  * Bio
+  * Company
+  * Location
+  * Hireable status
 
-- Search any public GitHub user
-- Fetch profile information using the GitHub API
-- Error handling for invalid usernames
-- API authentication using a Personal Access Token stored in a `.env` file
+* 📊 Displays GitHub statistics
 
-## Planned Features
+  * Public repositories
+  * Public gists
+  * Followers
+  * Following
 
-- Profile summary
-- Followers and following count
-- Public repository count
-- Most-used programming languages
-- Repository statistics
-- Account age
-- Contribution analysis
-- Top repositories
-- Repository size statistics
-- Fork and star statistics
-- Rich terminal tables
-- Profile score
-- Export report to JSON or CSV
+* 🗃️ Repository analysis
 
-## Requirements
+  * Total repositories
+  * Original vs forked repositories
+  * Most starred repository
+  * Most forked repository
+  * Most used programming language
+  * Average repository size
 
-- Python 3.10+
-- requests
-- python-dotenv
-- rich
+* 💻 Programming language report
+
+  * Languages used across repositories
+  * Percentage distribution
+  * Visual bar chart in the terminal
+
+* 🎨 Rich terminal interface using the `rich` library.
+
+## Technologies Used
+
+* Python 3
+* Requests
+* Rich
+* GitHub REST API
 
 ## Installation
 
-Install the required dependencies:
+Clone the repository:
 
 ```bash
-pip install requests python-dotenv rich
+git clone https://github.com/your-username/Github-Profile-Analyzer.git
+cd Github-Profile-Analyzer
 ```
 
-## Setup
-
-Create a `.env` file in the project directory:
-
-```env
-API_TOKEN=YOUR_GITHUB_PERSONAL_ACCESS_TOKEN
-```
-
-Replace `YOUR_GITHUB_PERSONAL_ACCESS_TOKEN` with your GitHub Personal Access Token.
-
-## Run
+Install the required packages:
 
 ```bash
-python3 Profile_Analyzer.py
+pip install requests rich
 ```
 
 ## Usage
 
-```text
-Enter Username:
+Run the program:
+
+```bash
+python Profile_Analyzer.py
 ```
 
-Example:
+Enter a GitHub username when prompted:
 
 ```text
 Enter Username: torvalds
 ```
 
-The program will fetch the user's public GitHub profile and display the available information.
+The program will retrieve the user's public information and display a detailed report.
+
+## Sample Output
+
+```text
+🪪 Profile Report
+📊 Statistics
+🗃️ Repo Statistics
+💻 Languages Used
+```
+
+Each section is displayed in a formatted Rich table for better readability.
 
 ## Project Structure
 
 ```text
-GitHub_Profile_Analyzer/
+Github_Profile_Analyzer/
+│
 ├── Profile_Analyzer.py
-├── .env
 └── README.md
 ```
 
-## Concepts Practiced
+## Limitations
 
-- REST APIs
-- HTTP requests
-- JSON parsing
-- Environment variables
-- Object-Oriented Programming (OOP)
-- Terminal applications
-- Error handling
-- Working with external APIs
+* Only analyzes **public** GitHub information.
+* Repository analysis is limited to the first 100 public repositories.
+* Private repositories are not accessible.
+* GitHub contribution graphs (green squares) are not available through the standard GitHub REST API.
 
-## Future Improvements
+## Possible Future Improvements
 
-- Beautiful terminal UI with Rich
-- Repository language charts
-- Commit and contribution analysis
-- User activity timeline
-- Profile comparison
-- Organization support
-- Repository filtering
-- README analysis
-- Markdown/PDF report generation
-- GitHub badge generation
+* Authentication using a Personal Access Token to increase API rate limits.
+* Repository activity analysis.
+* Contribution statistics.
+* Repository topic analysis.
+* Commit frequency analysis.
+* Export reports to PDF or CSV.
+* AI-generated profile insights and recommendations.
+* Repository language charts using Rich progress bars.
 
-## Author
+## License
 
-Sabal
+This project is open source and available under the MIT License.
