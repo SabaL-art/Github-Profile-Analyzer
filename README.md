@@ -1,88 +1,126 @@
-# GitHub Profile Analyzer
+# 📊 GitHub Profile Analyzer
 
-A terminal-based Python application that fetches live data from the GitHub REST API and generates a detailed report for any public GitHub profile. It presents profile information, repository statistics, and programming language usage in a clean, colorful terminal interface powered by **Rich**.
+A terminal-based Python application that fetches and analyzes a GitHub user's public profile using the GitHub REST API. The program generates clean, colorful reports using the **Rich** library and evaluates the profile with a custom **100-point scoring system**.
 
-Whether you're curious about your own profile or someone else's, this tool provides a quick overview of their public GitHub presence.
+> ⚠️ **Note:** The profile score is a custom heuristic designed for educational and portfolio purposes. It is **not** an official GitHub metric.
 
 ---
 
-## Features
+## ✨ Features
 
-### 🪪 Profile Information
+### 🪪 Profile Analysis
 
-Displays important account details, including:
+Displays important profile information, including:
 
-* Name
-* Account type
-* Account creation date
-* Last profile update
-* Public email
-* Bio
-* Company
-* Location
-* Hireable status
+- Name
+- Account type
+- Account creation date
+- Last profile update
+- Email
+- Bio
+- Company
+- Location
+- Hireable status
+
+---
 
 ### 📊 GitHub Statistics
 
-Shows key account statistics such as:
+Shows:
 
-* Public repositories
-* Public gists
-* Followers
-* Following
-
-### 🗃️ Repository Analysis
-
-Analyzes all available public repositories (up to 100) and reports:
-
-* Total repositories
-* Original vs. forked repositories
-* Most starred repository
-* Most forked repository
-* Most used programming language
-* Average repository size
-
-### 💻 Programming Language Breakdown
-
-Displays:
-
-* Languages used across repositories
-* Percentage distribution of each language
-* Terminal-based visual bar chart
-
-### 🎨 Rich Terminal Interface
-
-Uses the **Rich** library to display colorful, easy-to-read tables directly in the terminal.
+- Public repositories
+- Public gists
+- Followers
+- Following
 
 ---
 
-## Technologies Used
+### 🗃 Repository Analysis
 
-* Python 3
-* Requests
-* Rich
-* GitHub REST API
+Analyzes all public repositories and displays:
+
+- Total repositories
+- Original repositories
+- Forked repositories
+- Most starred repository
+- Most forked repository
+- Most used programming language
+- Average repository size
 
 ---
 
-## Installation
+### 💻 Language Usage
+
+Displays the programming languages used across repositories along with a visual percentage bar.
+
+Example:
+
+```
+Python      ██████████ 58.7%
+C++         ██████     24.3%
+JavaScript  ███        12.1%
+HTML        █          4.9%
+```
+
+---
+
+### 🏆 GitHub Profile Score
+
+The application evaluates a GitHub profile using a custom **100-point scoring system**.
+
+| Category | Maximum Score |
+|----------|--------------:|
+| Profile Completeness | 25 |
+| GitHub Statistics | 20 |
+| Repository Analysis | 55 |
+| **Total** | **100** |
+
+The score is calculated using factors such as:
+
+- Profile completeness
+- Account activity
+- Repository creation rate
+- Original vs forked repositories
+- Most starred repository
+- Most forked repository
+- Programming language diversity
+- Followers
+- Public gists
+
+Final rating:
+
+| Score | Rating |
+|------:|---------|
+| 90–100 | 🏆 Outstanding |
+| 80–89 | 🌟 Excellent |
+| 70–79 | ⭐ Good |
+| 60–69 | 👍 Fair |
+| 50–59 | 🌱 Beginner |
+| 40–49 | 🚀 Getting Started |
+| 20–39 | 📝 Incomplete |
+| 0–19 | 📦 Empty Profile |
+
+---
+
+## 📦 Installation
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/Github-Profile-Analyzer.git
-cd Github-Profile-Analyzer
+git clone https://github.com/YOUR_USERNAME/Github_Profile_Analyzer.git
+```
+
+Navigate to the project directory:
+
+```bash
+cd Github_Profile_Analyzer
 ```
 
 Install the required dependencies:
 
 ```bash
-pip install requests rich
+pip install -r requirements.txt
 ```
-
----
-
-## Usage
 
 Run the application:
 
@@ -90,70 +128,88 @@ Run the application:
 python Profile_Analyzer.py
 ```
 
-Enter a GitHub username:
+---
 
-```text
-Enter Username: torvalds
-```
+## 📸 Example Output
 
-The application will fetch the user's public GitHub data and generate a formatted analysis report.
+### Profile Report
+
+![Profile Report](screenshots/profile.png)
+---
+### Statistics Report
+
+![Statistics Report](screenshots/stats.png)
+---
+
+### Repository Statistics
+
+![Repository Statistics](screenshots/repo.png)
+---
+
+### Language Analysis
+
+![Profile Report](screenshots/language.png)
+---
+
+### Final Score
+
+![Final Score](screenshots/scores.png)
+---
+
+## 🛠 Built With
+
+- Python 3
+- Requests
+- Rich
+- GitHub REST API
 
 ---
 
-## Sample Output
+## 📁 Project Structure
 
-```text
-🪪 Profile Report
-
-📊 Statistics
-
-🗃️ Repository Statistics
-
-💻 Languages Used
 ```
-
-Each section is displayed as a formatted Rich table for improved readability.
-
-> **Tip:** Adding screenshots of the actual terminal output here will make the README much more attractive.
-
----
-
-## Project Structure
-
-```text
 Github_Profile_Analyzer/
 │
 ├── Profile_Analyzer.py
-└── README.md
+├── README.md
+├── requirements.txt
+├── LICENSE
+├── .gitignore
+└── screenshots/
 ```
 
 ---
 
-## Limitations
+## 🚀 Future Improvements
 
-* Only public GitHub data can be analyzed.
-* Repository analysis is limited to the first **100** public repositories returned by the GitHub API.
-* Private repositories cannot be accessed.
-* GitHub contribution graphs and contribution counts are not available through the standard GitHub REST API.
-* Unauthenticated requests are subject to GitHub's public API rate limit.
-
----
-
-## Future Improvements
-
-* Personal Access Token (PAT) authentication for higher API rate limits
-* Repository activity analysis
-* Commit history analysis
-* Repository topic analysis
-* Repository creation timeline
-* Export reports to JSON, CSV, or PDF
-* Repository size and language charts
-* AI-generated insights and recommendations
-* Organization profile support
-* Interactive terminal menu
+- Export reports as PDF
+- Export reports as Markdown
+- GitHub Personal Access Token support
+- Repository health analysis
+- Contribution activity analysis
+- Commit frequency analysis
+- Language charts
+- Organization profile support
+- Optional repository filtering
 
 ---
 
-## License
+## 🤝 Contributing
+
+Suggestions, improvements, and pull requests are always welcome.
+
+If you discover a bug or have an idea for a new feature, feel free to open an issue.
+
+---
+
+## 📄 License
 
 This project is licensed under the MIT License.
+
+---
+
+## 👨‍💻 Author
+
+**SabaL**
+
+GitHub: https://github.com/SabaL-art
